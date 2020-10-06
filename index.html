@@ -28,6 +28,10 @@
         border: 2px solid #fff;
         border-radius: 15px;
       }
+      .invalid-feedback {
+        background-color: red;
+        color: red;
+      }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -49,20 +53,60 @@
           into ShareX.
         </p>
       </div>
-      <form id="mainform">
+      <form id="mainform" action="/submit" method="GET">
+        <h4 class="mb-3">Enter Details to Create SXCU file:</h4>
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="firstName">Subdomain:</label>
+            <label for="subdomain">Subdomain</label>
             <input
               type="text"
               class="form-control"
               id="subdomain"
-              placeholder=""
-              value=""
+              placeholder="Enter your Subdomain."
+              value="https://sxcu.net"
               name="subdomain"
+              data-msg="Valid Subdomain is required."
             />
-            <div class="invalid-feedback">Valid Subdomain is required.</div>
           </div>
+          <div class="col-md-6 mb-3">
+            <label for="token"
+              >Token <span class="text-muted">(Optional)</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="token"
+              placeholder="The upload token for the sub domain that's being used, if one required. "
+              value=""
+              name="token"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="collection">Collection <span class="text-muted">(Optional)</span></label>
+              <input
+                type="text"
+                class="form-control"
+                id="collection"
+                name="collection"
+                placeholder="The collection ID to which you want to upload to if you want to upload to a collection."
+              />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="collection_token">Collection Token <span class="text-muted">(Optional)</span></label>
+              <input
+                type="text"
+                class="form-control"
+                id="collection_token"
+                name="collection_token"
+                placeholder=" the collection upload token if one is required by the collection you're uploading to."
+              />
+          </div>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="noembed" name="noembed">
+          <label class="custom-control-label" for="noembed">Do you want to Embed the Image?</label>
         </div>
         <hr class="mb-4" />
         <button class="btn btn-primary btn-lg btn-block" type="submit">
@@ -89,11 +133,7 @@
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"
-      integrity="sha256-u/J1Urdrk3nCYFefpoeTMgI5viU1ujCDu2fXXoSJjhg="
-      crossorigin="anonymous"
-    ></script>
+
     <script>
       var expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
       var regex = new RegExp(expression);
@@ -111,50 +151,34 @@
                 return "";
               }
             },
+            token: {
+              required: false,
+              normalizer: function (value) {
+                return $.trim(value);
+              },
+            collection: {
+              required: false,
+              normalizer: function (value) {
+                return $.trim(value);
+              },
+            },
+            collection_token: {
+              required: false,
+              normalizer: function (value) {
+                return $.trim(value);
+              },
+            },
+            noembed: {
+              required: true,
+              normalizer: function (value) {
+                console.log(value)
+                return ""
+
+              },
+            }
           },
         },
-      });
-    </script>
-    <script>
-      $.urlParam = function (name) {
-        var results = new RegExp("[\?&]" + name + "=([^&#]*)").exec(
-          window.location.href
-        );
-        if (results == null) {
-          return null;
-        }
-        return decodeURI(results[1]) || 0;
-      };
-      var jData = `{
-                "Name": "sxcu.net - python.is-ne.at",
-                "DestinationType": "ImageUploader",
-                "RequestURL": "https://python.is-ne.at/upload",
-                "FileFormName": "image",
-                "Arguments": {
-                    "token": "b8893b47-0e90-4fce-ad46-4264161a3a72"
-                },
-                "URL": "$json:url$",
-                "ThumbnailURL": "$json:thumb$",
-                "DeletionURL": "$json:del_url$"
-            }`;
-      var tmpData = JSON.parse(jData);
-      //console.log(tmpData)
-      var subdomain = $.urlParam("subdomain");
-      if (subdomain === null) {
-        console.log("no");
-      } else {
-        subdomain = decodeURIComponent(subdomain);
-        tmpData.RequestURL = subdomain;
-        console.log(tmpData);
-        console.log(subdomain);
-        var subdomainParse = new URL(subdomain);
-        var finalString = JSON.stringify(tmpData, null, "    ");
-        console.log(finalString);
-        var blob = new Blob([finalString], {
-          type: "text/plain;charset=utf-8",
-        });
-        saveAs(blob, "sxcu.net - " + subdomainParse.hostname + ".sxcu");
-      }
+      },});
     </script>
   </body>
 </html>
