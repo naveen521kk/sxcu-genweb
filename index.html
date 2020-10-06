@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <title>Hello, world!</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=PT+Sans&display=swap");
+      body {
+        font-family: "PT Sans", sans-serif;
+      }
+      img.logo {
+        background-image: linear-gradient(
+          to bottom right,
+          rgb(76, 40, 156),
+          rgb(223, 153, 216)
+        );
+        padding: 5px;
+        border: 2px solid #fff;
+        border-radius: 15px;
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="py-5 text-center">
+        <img
+          class="d-block mx-auto mb-4 logo"
+          src="logo.svg"
+          alt="sxcu-logo"
+          width="85"
+          height="85"
+        />
+        <h2><code>.sxcu</code> file generator</h2>
+        <p class="lead">
+          Use this to create custom <code>.sxcu</code> file and directly import
+          into ShareX.
+        </p>
+      </div>
+      <form id="mainform">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="firstName">Subdomain:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="subdomain"
+              placeholder=""
+              value=""
+              name="subdomain"
+            />
+            <div class="invalid-feedback">Valid Subdomain is required.</div>
+          </div>
+        </div>
+        <hr class="mb-4" />
+        <button class="btn btn-primary btn-lg btn-block" type="submit">
+          Submit
+        </button>
+        <hr />
+      </form>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"
+      integrity="sha256-u/J1Urdrk3nCYFefpoeTMgI5viU1ujCDu2fXXoSJjhg="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      var expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+      var regex = new RegExp(expression);
+      $("#mainform").validate({
+        rules: {
+          subdomain: {
+            required: true,
+            url: true,
+            normalizer: function (value) {
+              var url = value;
+              if (url.match(regex)) {
+                console.log(url);
+                return url;
+              } else {
+                return "";
+              }
+            },
+          },
+        },
+      });
+    </script>
+    <script>
+      $.urlParam = function (name) {
+        var results = new RegExp("[\?&]" + name + "=([^&#]*)").exec(
+          window.location.href
+        );
+        if (results == null) {
+          return null;
+        }
+        return decodeURI(results[1]) || 0;
+      };
+      var jData = `{
+                "Name": "sxcu.net - python.is-ne.at",
+                "DestinationType": "ImageUploader",
+                "RequestURL": "https://python.is-ne.at/upload",
+                "FileFormName": "image",
+                "Arguments": {
+                    "token": "b8893b47-0e90-4fce-ad46-4264161a3a72"
+                },
+                "URL": "$json:url$",
+                "ThumbnailURL": "$json:thumb$",
+                "DeletionURL": "$json:del_url$"
+            }`;
+      var tmpData = JSON.parse(jData);
+      //console.log(tmpData)
+      var subdomain = $.urlParam("subdomain");
+      if (subdomain === null) {
+        console.log("no");
+      } else {
+        subdomain = decodeURIComponent(subdomain);
+        tmpData.RequestURL = subdomain;
+        console.log(tmpData);
+        console.log(subdomain);
+        var subdomainParse = new URL(subdomain);
+        var finalString = JSON.stringify(tmpData, null, "    ");
+        console.log(finalString);
+        var blob = new Blob([finalString], {
+          type: "text/plain;charset=utf-8",
+        });
+        saveAs(blob, "sxcu.net - " + subdomainParse.hostname + ".sxcu");
+      }
+    </script>
+  </body>
+</html>
