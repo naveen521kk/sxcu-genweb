@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="py-5 text-center">
+        <img
+          class="d-block mx-auto mb-4 logo"
+          src="logo.svg"
+          alt="sxcu-logo"
+          width="85"
+          height="85"
+        />
+        <h2><code>.sxcu</code> file generator</h2>
+        <p class="lead">
+          Use this to create custom <code>.sxcu</code> file and directly import
+          into ShareX.
+        </p>
+      </div>
+      <form id="mainform" action="/submit" method="GET">
+        <h4 class="mb-3">Enter Details to Create SXCU file:</h4>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="subdomain">Subdomain</label>
+            <input
+              type="text"
+              class="form-control"
+              id="subdomain"
+              placeholder="Enter your Subdomain."
+              value="https://sxcu.net"
+              name="subdomain"
+              data-msg="Valid Subdomain is required."
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="token"
+              >Token <span class="text-muted">(Optional)</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="token"
+              placeholder="The upload token for the sub domain that's being used, if one required. "
+              value=""
+              name="token"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="collection">Collection <span class="text-muted">(Optional)</span></label>
+              <input
+                type="text"
+                class="form-control"
+                id="collection"
+                name="collection"
+                placeholder="The collection ID to which you want to upload to if you want to upload to a collection."
+              />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="collection_token">Collection Token <span class="text-muted">(Optional)</span></label>
+              <input
+                type="text"
+                class="form-control"
+                id="collection_token"
+                name="collection_token"
+                placeholder=" the collection upload token if one is required by the collection you're uploading to."
+              />
+          </div>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="noembed" name="noembed">
+          <label class="custom-control-label" for="noembed">Do you want to enable noembed?</label>
+        </div>
+        <hr class="mb-4" />
+        <button class="btn btn-primary btn-lg btn-block" type="submit">
+          Submit
+        </button>
+        <hr />
+      </form>
+    </div>
+    <script src="build.js"></script>
+  </body>
+</html>
